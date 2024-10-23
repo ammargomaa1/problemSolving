@@ -2,12 +2,20 @@ func isAnagram(s string, t string) bool {
 	if len(s) != len(t) {
 		return false
 	}
+	charCount := map[rune] int{}
 
-	sortedS := []rune(s)
-	sort.Slice(sortedS, func(i, j int) bool {return sortedS[i] < sortedS[j]})
+    for _,char := range s{
+        charCount[char]++
+    }
 
-	sortedT := []rune(t)
-	sort.Slice(sortedT, func(i, j int) bool {return sortedT[i] < sortedT[j]})
-	
-	return string(sortedT) == string(sortedS)
+    for _,char := range t{
+        charCount[char]--
+
+        if charCount[char] < 0 {
+            return false
+        }
+    }
+    
+
+	return true
 }
