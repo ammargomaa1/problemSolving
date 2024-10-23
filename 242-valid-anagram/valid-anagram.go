@@ -2,20 +2,20 @@ func isAnagram(s string, t string) bool {
 	if len(s) != len(t) {
 		return false
 	}
-	charCount := map[rune] int{}
 
-    for _,char := range s{
-        charCount[char]++
-    }
+	mappedLetterCounter := make([]int, 26)
 
-    for _,char := range t{
-        charCount[char]--
+	for _, letterS := range s {
+		mappedLetterCounter[letterS - 'a']++
+	}
 
-        if charCount[char] < 0 {
-            return false
-        }
-    }
-    
+	for _, letterT := range t {
+		mappedLetterCounter[letterT - 'a']--
+
+		if mappedLetterCounter[letterT - 'a'] < 0 {
+			return false
+		}
+	}
 
 	return true
 }
