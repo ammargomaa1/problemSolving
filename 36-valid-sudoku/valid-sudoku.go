@@ -14,7 +14,7 @@ func isValidSudoku(board [][]byte) bool {
 		x++
 	}
 
-	return true
+	return validateQuarters(board)
 }
 
 func isValideIndexRow(index int, board [][]byte) bool {
@@ -33,7 +33,7 @@ func isValideIndexRow(index int, board [][]byte) bool {
 		}
 	}
 
-	return validateQuarters(board)
+	return true
 }
 
 func validateIndexColumns(index int, board [][]byte) bool {
