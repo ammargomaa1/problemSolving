@@ -1,99 +1,46 @@
-
 func isValidSudoku(board [][]byte) bool {
-	x := 0
-	for x < 9 {
-		isValid := isValideIndexRow(x, board)
-		if !isValid {
-			return false
-		}
+	columns := make([]map[byte]bool,9)
 
-		isValid = validateIndexColumns(x, board)
-		if !isValid {
-			return false
-		}
-		x++
-	}
+	rows :=  make([]map[byte]bool,9)
 
-	return validateQuarters(board)
-}
+	quarters := make(map[string]map[byte]bool, 9)
 
-func isValideIndexRow(index int, board [][]byte) bool {
-	row := board[index]
-	foundNums := make(map[byte]bool, 9)
-
-	for _, num := range row {
-		if num == 46 {
-			continue
-		}
-
-		if !foundNums[num] {
-			foundNums[num] = true
-		} else {
-			return false
-		}
-	}
-
-	return true
-}
-
-func validateIndexColumns(index int, board [][]byte) bool {
-	foundNums := make(map[byte]bool, 9)
-
-	for _, row := range board {
-		if row[index] == 46 {
-			continue
-		}
-
-		if !foundNums[row[index]] {
-			foundNums[row[index]] = true
-		} else {
-			return false
-		}
-
-	}
-
-	return true
-}
-
-func validateQuarters(board [][]byte) bool {
-	sets := map[int][]byte{}
-	rowSet := 1
-	for rowIndex, row := range board {
-		columnSet := 1
-		for columnIndex, column := range row {
-			setName := ((rowSet) * 10) + (columnSet)
-			sets[setName] = append(sets[setName], column)
-			if (columnIndex+1)%3 == 0 {
-				columnSet++
-			}
-
-		}
-
-		if (rowIndex+1)%3 == 0 {
-			rowSet++
-		}
-	}
-
-	fmt.Println(sets)
-
-	foundNums := make(map[byte]bool, 9)
-
-	for _, set := range sets {
-
-		for _, num := range set {
-			if num == 46 {
+	for x, row := range board{
+		quarterXPosition := x/3
+		for y, cell := range row{
+			if string(cell) == "." {
 				continue
 			}
 
-			if !foundNums[num] {
-				foundNums[num] = true
-			} else {
+			if columns[y] == nil{
+				columns[y] = make(map[byte]bool, 9)
+			}
+
+			if columns[y][cell]  {
 				return false
 			}
+			columns[y][cell] = true
+
+			if rows[x] == nil {
+				rows[x] = make(map[byte]bool, 9)
+			}
+
+			if rows[x][cell] {
+				return false
+			}
+			rows[x][cell] = true
+
+			quarterYPosition := y/3
+			if quarters[string(quarterXPosition) + string(quarterYPosition)] == nil {
+				quarters[string(quarterXPosition) + string(quarterYPosition)] = make(map[byte]bool, 9)
+			}
+			
+			if quarters[string(quarterXPosition) + string(quarterYPosition)][cell] {
+				return false
+			}
+			quarters[string(quarterXPosition) + string(quarterYPosition)][cell] = true
 		}
-		foundNums = make(map[byte]bool, 9)
-
 	}
-	return true
 
+	return true
 }
